@@ -9,6 +9,7 @@ group = mod_group_id
 
 repositories {
     mavenLocal()
+    mavenCentral()
 }
 
 base {
@@ -22,6 +23,7 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 
 dependencies {
+    compileOnly 'org.apache.logging.log4j:log4j-api:2.23.1'
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
