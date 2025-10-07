@@ -1,33 +1,26 @@
 package net.minecraft.network.codec;
 
 import java.util.Objects;
-import java.util.function.BiConsumer;
-import java.util.function.Function;
 
 /**
  * Minimal stub of Minecraft's {@code StreamCodec} interface so the mod can compile without the
  * official game classes. The real runtime type is an interface with a static {@code of} factory,
- * so we mirror that structure to avoid {@link IncompatibleClassChangeError} when the genuine
- * classes are loaded.
+ * so we mirror that structure to avoid linkage errors when the genuine classes are loaded.
  */
-public interface StreamCodec<B, T> {
+public interface StreamCodec<B, T> extends StreamEncoder<B, T>, StreamDecoder<B, T> {
 
-    void encode(B buffer, T value);
-
-    T decode(B buffer);
-
-    static <B, T> StreamCodec<B, T> of(BiConsumer<B, T> writer, Function<B, T> reader) {
-        Objects.requireNonNull(writer, "writer");
-        Objects.requireNonNull(reader, "reader");
+    static <B, T> StreamCodec<B, T> of(StreamEncoder<B, T> encoder, StreamDecoder<B, T> decoder) {
+        Objects.requireNonNull(encoder, "encoder");
+        Objects.requireNonNull(decoder, "decoder");
         return new StreamCodec<>() {
             @Override
             public void encode(B buffer, T value) {
-                writer.accept(buffer, value);
+                encoder.encode(buffer, value);
             }
 
             @Override
             public T decode(B buffer) {
-                return reader.apply(buffer);
+                return decoder.decode(buffer);
             }
         };
     }
