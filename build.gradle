@@ -29,7 +29,10 @@ dependencies {
 }
 
 tasks.withType(Jar).configureEach {
-    exclude('com/mojang/**', 'net/minecraft/**', 'net/neoforged/neoforge/network/**')
+    exclude('com/mojang/**',
+            'com/cobblemon/**',
+            'net/minecraft/**',
+            'net/neoforged/neoforge/network/**')
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
