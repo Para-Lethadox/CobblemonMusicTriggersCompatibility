@@ -19,7 +19,8 @@ public final class Cobblemonmusictriggerscompat {
     public static final String ID = "cobblemonmusictriggerscompat";
     private static final Logger LOGGER = LogManager.getLogger(ID);
 
-    private Cobblemonmusictriggerscompat() {
+    public Cobblemonmusictriggerscompat() {
+        LOGGER.info("Constructing Cobblemon Music Triggers Compat");
     }
 
     @SubscribeEvent
