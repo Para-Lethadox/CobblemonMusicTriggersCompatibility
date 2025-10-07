@@ -29,10 +29,20 @@ dependencies {
 }
 
 tasks.withType(Jar).configureEach {
-    exclude('com/mojang/**',
-            'com/cobblemon/**',
-            'net/minecraft/**',
-            'net/neoforged/neoforge/network/**')
+    includeEmptyDirs = false
+
+    def modRoot = project.mod_group_id.replace('.', '/')
+    def allowedRoots = [modRoot, 'assets', 'data', 'META-INF']
+
+    eachFile { fileCopyDetails ->
+        def path = fileCopyDetails.path
+        def keepEntry = (path.indexOf('/') == -1) ||
+                allowedRoots.any { root -> path == root || path.startsWith(root + '/') }
+
+        if (!keepEntry) {
+            fileCopyDetails.exclude()
+        }
+    }
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
