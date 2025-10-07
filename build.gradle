@@ -1,3 +1,5 @@
+import org.gradle.jvm.tasks.Jar
+
 plugins {
     id 'java-library'
     id 'maven-publish'
@@ -24,6 +26,10 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
     compileOnly 'org.apache.logging.log4j:log4j-api:2.23.1'
+}
+
+tasks.withType(Jar).configureEach {
+    exclude('com/mojang/**', 'net/minecraft/**', 'net/neoforged/neoforge/network/**')
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
