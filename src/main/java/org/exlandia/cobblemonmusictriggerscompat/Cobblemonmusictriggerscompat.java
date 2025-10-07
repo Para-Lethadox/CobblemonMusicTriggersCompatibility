@@ -1,7 +1,5 @@
 package org.exlandia.cobblemonmusictriggerscompat;
 
-import java.util.function.BiConsumer;
-
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
@@ -14,6 +12,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.exlandia.cobblemonmusictriggerscompat.client.BattleClientHandler;
 import org.exlandia.cobblemonmusictriggerscompat.net.BattleTriggerPayload;
+import org.exlandia.cobblemonmusictriggerscompat.net.PayloadRegistrationHelper;
 
 @Mod(Cobblemonmusictriggerscompat.ID)
 @EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD, modid = Cobblemonmusictriggerscompat.ID)
@@ -45,14 +44,11 @@ public final class Cobblemonmusictriggerscompat {
     public static void registerPayloads(RegisterPayloadHandlersEvent event) {
         PayloadRegistrar registrar = event.registrar(ID).versioned("1");
 
-        @SuppressWarnings({"rawtypes", "unchecked"})
-        BiConsumer handler = (payload, context) ->
-                BattleClientHandler.onBattleTrigger((BattleTriggerPayload) payload);
-
-        registrar.playToClient(
+        PayloadRegistrationHelper.registerPlayToClient(
+                registrar,
                 BattleTriggerPayload.TYPE,
                 BattleTriggerPayload.STREAM_CODEC,
-                handler
+                (payload, context) -> BattleClientHandler.onBattleTrigger(payload)
         );
     }
 }
