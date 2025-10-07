@@ -1,18 +1,24 @@
 package net.minecraft.network.protocol.common.custom;
 
+import net.minecraft.resources.ResourceLocation;
+
 public interface CustomPacketPayload {
     Type<? extends CustomPacketPayload> type();
 
     final class Type<T extends CustomPacketPayload> {
-        private final Object identifier;
+        private final ResourceLocation id;
 
-        public Type(Object identifier) {
-            this.identifier = identifier;
+        public Type(ResourceLocation id) {
+            this.id = id;
+        }
+
+        public ResourceLocation id() {
+            return id;
         }
 
         @Override
         public String toString() {
-            return String.valueOf(identifier);
+            return String.valueOf(id);
         }
     }
 }
