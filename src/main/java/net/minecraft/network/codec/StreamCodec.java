@@ -4,24 +4,31 @@ import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
-public final class StreamCodec<B, T> {
-    private final BiConsumer<B, T> writer;
-    private final Function<B, T> reader;
+/**
+ * Minimal stub of Minecraft's {@code StreamCodec} interface so the mod can compile without the
+ * official game classes. The real runtime type is an interface with a static {@code of} factory,
+ * so we mirror that structure to avoid {@link IncompatibleClassChangeError} when the genuine
+ * classes are loaded.
+ */
+public interface StreamCodec<B, T> {
 
-    private StreamCodec(BiConsumer<B, T> writer, Function<B, T> reader) {
-        this.writer = writer;
-        this.reader = reader;
-    }
+    void encode(B buffer, T value);
 
-    public static <B, T> StreamCodec<B, T> of(BiConsumer<B, T> writer, Function<B, T> reader) {
-        return new StreamCodec<>(Objects.requireNonNull(writer), Objects.requireNonNull(reader));
-    }
+    T decode(B buffer);
 
-    public void encode(B buffer, T value) {
-        writer.accept(buffer, value);
-    }
+    static <B, T> StreamCodec<B, T> of(BiConsumer<B, T> writer, Function<B, T> reader) {
+        Objects.requireNonNull(writer, "writer");
+        Objects.requireNonNull(reader, "reader");
+        return new StreamCodec<>() {
+            @Override
+            public void encode(B buffer, T value) {
+                writer.accept(buffer, value);
+            }
 
-    public T decode(B buffer) {
-        return reader.apply(buffer);
+            @Override
+            public T decode(B buffer) {
+                return reader.apply(buffer);
+            }
+        };
     }
 }
