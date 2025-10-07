@@ -1,14 +1,14 @@
 package org.exlandia.cobblemonmusictriggerscompat.client;
 
-import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.exlandia.cobblemonmusictriggerscompat.net.BattleTriggerPayload;
 import mods.thecomputerizer.musictriggers.api.channels.ChannelHelper;
 import mods.thecomputerizer.theimpossiblelibrary.api.wrapper.WrapperHelper;
 
 public final class BattleClientHandler {
-    private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger(BattleClientHandler.class);
 
     private BattleClientHandler() {
     }
