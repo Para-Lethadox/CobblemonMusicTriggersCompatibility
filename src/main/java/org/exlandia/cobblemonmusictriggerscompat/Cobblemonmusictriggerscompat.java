@@ -12,6 +12,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.exlandia.cobblemonmusictriggerscompat.client.BattleClientHandler;
 import org.exlandia.cobblemonmusictriggerscompat.net.BattleTriggerPayload;
+import org.exlandia.cobblemonmusictriggerscompat.net.PayloadRegistrationHelper;
 
 @Mod(Cobblemonmusictriggerscompat.ID)
 @EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD, modid = Cobblemonmusictriggerscompat.ID)
@@ -19,7 +20,8 @@ public final class Cobblemonmusictriggerscompat {
     public static final String ID = "cobblemonmusictriggerscompat";
     private static final Logger LOGGER = LogManager.getLogger(ID);
 
-    private Cobblemonmusictriggerscompat() {
+    public Cobblemonmusictriggerscompat() {
+        LOGGER.info("Constructing Cobblemon Music Triggers Compat");
     }
 
     @SubscribeEvent
@@ -41,7 +43,9 @@ public final class Cobblemonmusictriggerscompat {
     @SubscribeEvent
     public static void registerPayloads(RegisterPayloadHandlersEvent event) {
         PayloadRegistrar registrar = event.registrar(ID).versioned("1");
-        registrar.playToClient(
+
+        PayloadRegistrationHelper.registerPlayToClient(
+                registrar,
                 BattleTriggerPayload.TYPE,
                 BattleTriggerPayload.STREAM_CODEC,
                 (payload, context) -> BattleClientHandler.onBattleTrigger(payload)
